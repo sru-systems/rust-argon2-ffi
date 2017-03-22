@@ -1,0 +1,20 @@
+[package]
+name = "rust-argon2-ffi"
+version = "0.1.0"
+authors = ["Martijn Rijkeboer <mrr@sru-systems.com>"]
+license = "MIT/Apache-2.0"
+description = "FFI bindings for the rust-argon2 crate."
+documentation = "https://docs.sru-systems.com/rust-argon2-ffi/0.1.0/argon2_ffi/"
+homepage = "https://github.com/sru-systems/rust-argon2-ffi"
+repository = "https://github.com/sru-systems/rust-argon2-ffi"
+readme = "README.md"
+keywords = ["argon2", "ffi"]
+
+[lib]
+name = "argon2_ffi"
+crate-type = ["cdylib"]
+
+[dependencies]
+libc = "0.2.21"
+rust-argon2 = "0.3.0"
+
