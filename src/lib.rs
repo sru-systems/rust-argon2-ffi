@@ -150,7 +150,7 @@ pub extern "C" fn encoded_len(
     time_cost: uint32_t,
     parallelism: uint32_t,
     salt_len: uint32_t,
-    hash_len: uint32_t
+    hash_len: uint32_t,
 ) -> uint32_t {
     let variant = match Variant::from_u32(variant) {
         Ok(val) => val,
@@ -184,7 +184,7 @@ pub extern "C" fn hash_encoded(
     ad_len: size_t,
     hash_len: size_t,
     encoded: *mut c_char,
-    encoded_len: size_t
+    encoded_len: size_t,
 ) -> int32_t {
     let pwd = match mk_slice(pwd, pwd_len, ReturnValue::PwdPtrMismatch) {
         Ok(val) => val,
@@ -200,17 +200,19 @@ pub extern "C" fn hash_encoded(
         return ReturnValue::EncodingFail as i32;
     }
 
-    let config = match mk_config(variant,
-                                 version,
-                                 mem_cost,
-                                 time_cost,
-                                 lanes,
-                                 threads,
-                                 secret,
-                                 secret_len,
-                                 ad,
-                                 ad_len,
-                                 hash_len) {
+    let config = match mk_config(
+        variant,
+        version,
+        mem_cost,
+        time_cost,
+        lanes,
+        threads,
+        secret,
+        secret_len,
+        ad,
+        ad_len,
+        hash_len,
+    ) {
         Ok(val) => val,
         Err(err) => return err as i32,
     };
@@ -250,25 +252,27 @@ pub extern "C" fn hash_encoded_argon2d(
     salt_len: size_t,
     hash_len: size_t,
     encoded: *mut c_char,
-    encoded_len: size_t
+    encoded_len: size_t,
 ) -> int32_t {
-    hash_encoded(Variant::Argon2d as u32,
-                 DEF_VERSION,
-                 mem_cost,
-                 time_cost,
-                 parallelism,
-                 parallelism,
-                 pwd,
-                 pwd_len,
-                 salt,
-                 salt_len,
-                 ptr::null(),
-                 0,
-                 ptr::null(),
-                 0,
-                 hash_len,
-                 encoded,
-                 encoded_len)
+    hash_encoded(
+        Variant::Argon2d as u32,
+        DEF_VERSION,
+        mem_cost,
+        time_cost,
+        parallelism,
+        parallelism,
+        pwd,
+        pwd_len,
+        salt,
+        salt_len,
+        ptr::null(),
+        0,
+        ptr::null(),
+        0,
+        hash_len,
+        encoded,
+        encoded_len,
+    )
 }
 
 /// Hashes the password using Argon2i and writes the encoded string to `encoded`.
@@ -283,25 +287,27 @@ pub extern "C" fn hash_encoded_argon2i(
     salt_len: size_t,
     hash_len: size_t,
     encoded: *mut c_char,
-    encoded_len: size_t
+    encoded_len: size_t,
 ) -> int32_t {
-    hash_encoded(Variant::Argon2i as u32,
-                 DEF_VERSION,
-                 mem_cost,
-                 time_cost,
-                 parallelism,
-                 parallelism,
-                 pwd,
-                 pwd_len,
-                 salt,
-                 salt_len,
-                 ptr::null(),
-                 0,
-                 ptr::null(),
-                 0,
-                 hash_len,
-                 encoded,
-                 encoded_len)
+    hash_encoded(
+        Variant::Argon2i as u32,
+        DEF_VERSION,
+        mem_cost,
+        time_cost,
+        parallelism,
+        parallelism,
+        pwd,
+        pwd_len,
+        salt,
+        salt_len,
+        ptr::null(),
+        0,
+        ptr::null(),
+        0,
+        hash_len,
+        encoded,
+        encoded_len,
+    )
 }
 
 /// Hashes the password using Argon2id and writes the encoded string to `encoded`.
@@ -316,25 +322,27 @@ pub extern "C" fn hash_encoded_argon2id(
     salt_len: size_t,
     hash_len: size_t,
     encoded: *mut c_char,
-    encoded_len: size_t
+    encoded_len: size_t,
 ) -> int32_t {
-    hash_encoded(Variant::Argon2id as u32,
-                 DEF_VERSION,
-                 mem_cost,
-                 time_cost,
-                 parallelism,
-                 parallelism,
-                 pwd,
-                 pwd_len,
-                 salt,
-                 salt_len,
-                 ptr::null(),
-                 0,
-                 ptr::null(),
-                 0,
-                 hash_len,
-                 encoded,
-                 encoded_len)
+    hash_encoded(
+        Variant::Argon2id as u32,
+        DEF_VERSION,
+        mem_cost,
+        time_cost,
+        parallelism,
+        parallelism,
+        pwd,
+        pwd_len,
+        salt,
+        salt_len,
+        ptr::null(),
+        0,
+        ptr::null(),
+        0,
+        hash_len,
+        encoded,
+        encoded_len,
+    )
 }
 
 /// Hashes the password using default settings and writes the encoded string to `encoded`.
@@ -345,25 +353,27 @@ pub extern "C" fn hash_encoded_simple(
     salt: *const uint8_t,
     salt_len: size_t,
     encoded: *mut c_char,
-    encoded_len: size_t
+    encoded_len: size_t,
 ) -> int32_t {
-    hash_encoded(DEF_VARIANT,
-                 DEF_VERSION,
-                 DEF_MEMORY,
-                 DEF_TIME,
-                 DEF_LANES,
-                 DEF_THREADS,
-                 pwd,
-                 pwd_len,
-                 salt,
-                 salt_len,
-                 ptr::null(),
-                 0,
-                 ptr::null(),
-                 0,
-                 DEF_HASH_LEN,
-                 encoded,
-                 encoded_len)
+    hash_encoded(
+        DEF_VARIANT,
+        DEF_VERSION,
+        DEF_MEMORY,
+        DEF_TIME,
+        DEF_LANES,
+        DEF_THREADS,
+        pwd,
+        pwd_len,
+        salt,
+        salt_len,
+        ptr::null(),
+        0,
+        ptr::null(),
+        0,
+        DEF_HASH_LEN,
+        encoded,
+        encoded_len,
+    )
 }
 
 /// Hashes the password and writes the hash bytes to `out`.
@@ -384,7 +394,7 @@ pub extern "C" fn hash_raw(
     ad: *const uint8_t,
     ad_len: size_t,
     out: *mut uint8_t,
-    out_len: size_t
+    out_len: size_t,
 ) -> int32_t {
     let pwd = match mk_slice(pwd, pwd_len, ReturnValue::PwdPtrMismatch) {
         Ok(val) => val,
@@ -400,17 +410,19 @@ pub extern "C" fn hash_raw(
         return ReturnValue::OutputPtrNull as i32;
     }
 
-    let config = match mk_config(variant,
-                                 version,
-                                 mem_cost,
-                                 time_cost,
-                                 lanes,
-                                 threads,
-                                 secret,
-                                 secret_len,
-                                 ad,
-                                 ad_len,
-                                 out_len) {
+    let config = match mk_config(
+        variant,
+        version,
+        mem_cost,
+        time_cost,
+        lanes,
+        threads,
+        secret,
+        secret_len,
+        ad,
+        ad_len,
+        out_len,
+    ) {
         Ok(val) => val,
         Err(err) => return err as i32,
     };
@@ -440,24 +452,26 @@ pub extern "C" fn hash_raw_argon2d(
     salt: *const uint8_t,
     salt_len: size_t,
     out: *mut uint8_t,
-    out_len: size_t
+    out_len: size_t,
 ) -> int32_t {
-    hash_raw(Variant::Argon2d as u32,
-             DEF_VERSION,
-             mem_cost,
-             time_cost,
-             parallelism,
-             parallelism,
-             pwd,
-             pwd_len,
-             salt,
-             salt_len,
-             ptr::null(),
-             0,
-             ptr::null(),
-             0,
-             out,
-             out_len)
+    hash_raw(
+        Variant::Argon2d as u32,
+        DEF_VERSION,
+        mem_cost,
+        time_cost,
+        parallelism,
+        parallelism,
+        pwd,
+        pwd_len,
+        salt,
+        salt_len,
+        ptr::null(),
+        0,
+        ptr::null(),
+        0,
+        out,
+        out_len,
+    )
 }
 
 /// Hashes the password using Argon2i and writes the hash bytes to `out`.
@@ -471,24 +485,26 @@ pub extern "C" fn hash_raw_argon2i(
     salt: *const uint8_t,
     salt_len: size_t,
     out: *mut uint8_t,
-    out_len: size_t
+    out_len: size_t,
 ) -> int32_t {
-    hash_raw(Variant::Argon2i as u32,
-             DEF_VERSION,
-             mem_cost,
-             time_cost,
-             parallelism,
-             parallelism,
-             pwd,
-             pwd_len,
-             salt,
-             salt_len,
-             ptr::null(),
-             0,
-             ptr::null(),
-             0,
-             out,
-             out_len)
+    hash_raw(
+        Variant::Argon2i as u32,
+        DEF_VERSION,
+        mem_cost,
+        time_cost,
+        parallelism,
+        parallelism,
+        pwd,
+        pwd_len,
+        salt,
+        salt_len,
+        ptr::null(),
+        0,
+        ptr::null(),
+        0,
+        out,
+        out_len,
+    )
 }
 
 /// Hashes the password using Argon2id and writes the hash bytes to `out`.
@@ -502,24 +518,26 @@ pub extern "C" fn hash_raw_argon2id(
     salt: *const uint8_t,
     salt_len: size_t,
     out: *mut uint8_t,
-    out_len: size_t
+    out_len: size_t,
 ) -> int32_t {
-    hash_raw(Variant::Argon2id as u32,
-             DEF_VERSION,
-             mem_cost,
-             time_cost,
-             parallelism,
-             parallelism,
-             pwd,
-             pwd_len,
-             salt,
-             salt_len,
-             ptr::null(),
-             0,
-             ptr::null(),
-             0,
-             out,
-             out_len)
+    hash_raw(
+        Variant::Argon2id as u32,
+        DEF_VERSION,
+        mem_cost,
+        time_cost,
+        parallelism,
+        parallelism,
+        pwd,
+        pwd_len,
+        salt,
+        salt_len,
+        ptr::null(),
+        0,
+        ptr::null(),
+        0,
+        out,
+        out_len,
+    )
 }
 
 /// Hashes the password using default settings and writes the hash bytes to `out`.
@@ -530,24 +548,26 @@ pub extern "C" fn hash_raw_simple(
     salt: *const uint8_t,
     salt_len: size_t,
     out: *mut uint8_t,
-    out_len: size_t
+    out_len: size_t,
 ) -> int32_t {
-    hash_raw(DEF_VARIANT,
-             DEF_VERSION,
-             DEF_MEMORY,
-             DEF_TIME,
-             DEF_LANES,
-             DEF_THREADS,
-             pwd,
-             pwd_len,
-             salt,
-             salt_len,
-             ptr::null(),
-             0,
-             ptr::null(),
-             0,
-             out,
-             out_len)
+    hash_raw(
+        DEF_VARIANT,
+        DEF_VERSION,
+        DEF_MEMORY,
+        DEF_TIME,
+        DEF_LANES,
+        DEF_THREADS,
+        pwd,
+        pwd_len,
+        salt,
+        salt_len,
+        ptr::null(),
+        0,
+        ptr::null(),
+        0,
+        out,
+        out_len,
+    )
 }
 
 /// Verifies the password with the encoded string and returns `0` when correct.
@@ -555,7 +575,7 @@ pub extern "C" fn hash_raw_simple(
 pub extern "C" fn verify_encoded(
     encoded: *const c_char,
     pwd: *const uint8_t,
-    pwd_len: size_t
+    pwd_len: size_t,
 ) -> int32_t {
     let encoded = match mk_str(encoded, ReturnValue::DecodingFail) {
         Ok(val) => val,
@@ -592,7 +612,7 @@ pub extern "C" fn verify_raw(
     ad: *const uint8_t,
     ad_len: size_t,
     hash: *const uint8_t,
-    hash_len: size_t
+    hash_len: size_t,
 ) -> int32_t {
     let pwd = match mk_slice(pwd, pwd_len, ReturnValue::PwdPtrMismatch) {
         Ok(val) => val,
@@ -609,17 +629,19 @@ pub extern "C" fn verify_raw(
         Err(err) => return err as i32,
     };
 
-    let config = match mk_config(variant,
-                                 version,
-                                 mem_cost,
-                                 time_cost,
-                                 lanes,
-                                 threads,
-                                 secret,
-                                 secret_len,
-                                 ad,
-                                 ad_len,
-                                 hash_len) {
+    let config = match mk_config(
+        variant,
+        version,
+        mem_cost,
+        time_cost,
+        lanes,
+        threads,
+        secret,
+        secret_len,
+        ad,
+        ad_len,
+        hash_len,
+    ) {
         Ok(val) => val,
         Err(err) => return err as i32,
     };
@@ -641,24 +663,26 @@ pub extern "C" fn verify_raw_argon2d(
     salt: *const uint8_t,
     salt_len: size_t,
     hash: *const uint8_t,
-    hash_len: size_t
+    hash_len: size_t,
 ) -> int32_t {
-    verify_raw(Variant::Argon2d as u32,
-               DEF_VERSION,
-               mem_cost,
-               time_cost,
-               parallelism,
-               parallelism,
-               pwd,
-               pwd_len,
-               salt,
-               salt_len,
-               ptr::null(),
-               0,
-               ptr::null(),
-               0,
-               hash,
-               hash_len)
+    verify_raw(
+        Variant::Argon2d as u32,
+        DEF_VERSION,
+        mem_cost,
+        time_cost,
+        parallelism,
+        parallelism,
+        pwd,
+        pwd_len,
+        salt,
+        salt_len,
+        ptr::null(),
+        0,
+        ptr::null(),
+        0,
+        hash,
+        hash_len,
+    )
 }
 
 /// Verifies the password using Argon2i and returns `0` when correct.
@@ -672,24 +696,26 @@ pub extern "C" fn verify_raw_argon2i(
     salt: *const uint8_t,
     salt_len: size_t,
     hash: *const uint8_t,
-    hash_len: size_t
+    hash_len: size_t,
 ) -> int32_t {
-    verify_raw(Variant::Argon2i as u32,
-               DEF_VERSION,
-               mem_cost,
-               time_cost,
-               parallelism,
-               parallelism,
-               pwd,
-               pwd_len,
-               salt,
-               salt_len,
-               ptr::null(),
-               0,
-               ptr::null(),
-               0,
-               hash,
-               hash_len)
+    verify_raw(
+        Variant::Argon2i as u32,
+        DEF_VERSION,
+        mem_cost,
+        time_cost,
+        parallelism,
+        parallelism,
+        pwd,
+        pwd_len,
+        salt,
+        salt_len,
+        ptr::null(),
+        0,
+        ptr::null(),
+        0,
+        hash,
+        hash_len,
+    )
 }
 
 /// Verifies the password using Argon2id and returns `0` when correct.
@@ -703,24 +729,26 @@ pub extern "C" fn verify_raw_argon2id(
     salt: *const uint8_t,
     salt_len: size_t,
     hash: *const uint8_t,
-    hash_len: size_t
+    hash_len: size_t,
 ) -> int32_t {
-    verify_raw(Variant::Argon2id as u32,
-               DEF_VERSION,
-               mem_cost,
-               time_cost,
-               parallelism,
-               parallelism,
-               pwd,
-               pwd_len,
-               salt,
-               salt_len,
-               ptr::null(),
-               0,
-               ptr::null(),
-               0,
-               hash,
-               hash_len)
+    verify_raw(
+        Variant::Argon2id as u32,
+        DEF_VERSION,
+        mem_cost,
+        time_cost,
+        parallelism,
+        parallelism,
+        pwd,
+        pwd_len,
+        salt,
+        salt_len,
+        ptr::null(),
+        0,
+        ptr::null(),
+        0,
+        hash,
+        hash_len,
+    )
 }
 
 /// Verifies the password using default settings and returns `0` when correct.
@@ -731,24 +759,26 @@ pub extern "C" fn verify_raw_simple(
     salt: *const uint8_t,
     salt_len: size_t,
     hash: *const uint8_t,
-    hash_len: size_t
+    hash_len: size_t,
 ) -> int32_t {
-    verify_raw(DEF_VARIANT,
-               DEF_VERSION,
-               DEF_MEMORY,
-               DEF_TIME,
-               DEF_LANES,
-               DEF_THREADS,
-               pwd,
-               pwd_len,
-               salt,
-               salt_len,
-               ptr::null(),
-               0,
-               ptr::null(),
-               0,
-               hash,
-               hash_len)
+    verify_raw(
+        DEF_VARIANT,
+        DEF_VERSION,
+        DEF_MEMORY,
+        DEF_TIME,
+        DEF_LANES,
+        DEF_THREADS,
+        pwd,
+        pwd_len,
+        salt,
+        salt_len,
+        ptr::null(),
+        0,
+        ptr::null(),
+        0,
+        hash,
+        hash_len,
+    )
 }
 
 fn mk_config<'a>(
@@ -762,7 +792,7 @@ fn mk_config<'a>(
     secret_len: size_t,
     ad: *const uint8_t,
     ad_len: size_t,
-    hash_len: size_t
+    hash_len: size_t,
 ) -> Result<Config<'a>, ReturnValue> {
     let variant = match Variant::from_u32(variant) {
         Ok(val) => val,
@@ -826,26 +856,122 @@ mod tests {
     use std::ffi::CString;
     use super::*;
 
-    const ARGON2D_ENC: &'static [u8] = b"$argon2d$v=19$m=4096,t=3,p=1$c29tZXNhbHQ\
+    const ARGON2D_ENC: &'static [u8] =
+        b"$argon2d$v=19$m=4096,t=3,p=1$c29tZXNhbHQ\
                                          $2+JCoQtY/2x5F0VB9pEVP3xBNguWP1T25Ui0PtZuk8o";
 
-    const ARGON2I_ENC: &'static [u8] = b"$argon2i$v=19$m=4096,t=3,p=1$c29tZXNhbHQ\
+    const ARGON2I_ENC: &'static [u8] =
+        b"$argon2i$v=19$m=4096,t=3,p=1$c29tZXNhbHQ\
                                          $iWh06vD8Fy27wf9npn6FXWiCX4K6pW6Ue1Bnzz07Z8A";
 
-    const ARGON2ID_ENC: &'static [u8] = b"$argon2id$v=19$m=4096,t=3,p=1$c29tZXNhbHQ\
+    const ARGON2ID_ENC: &'static [u8] =
+        b"$argon2id$v=19$m=4096,t=3,p=1$c29tZXNhbHQ\
                                           $qLml5cbqFAO6YxVHhrSBHP0UWdxrIxkNcM8aMX3blzU";
 
-    const ARGON2D_HASH: [u8; 32] = [219, 226, 66, 161, 11, 88, 255, 108, 121, 23, 69, 65, 246,
-                                    145, 21, 63, 124, 65, 54, 11, 150, 63, 84, 246, 229, 72, 180,
-                                    62, 214, 110, 147, 202];
+    const ARGON2D_HASH: [u8; 32] = [
+        219,
+        226,
+        66,
+        161,
+        11,
+        88,
+        255,
+        108,
+        121,
+        23,
+        69,
+        65,
+        246,
+        145,
+        21,
+        63,
+        124,
+        65,
+        54,
+        11,
+        150,
+        63,
+        84,
+        246,
+        229,
+        72,
+        180,
+        62,
+        214,
+        110,
+        147,
+        202,
+    ];
 
-    const ARGON2I_HASH: [u8; 32] = [137, 104, 116, 234, 240, 252, 23, 45, 187, 193, 255, 103, 166,
-                                    126, 133, 93, 104, 130, 95, 130, 186, 165, 110, 148, 123, 80,
-                                    103, 207, 61, 59, 103, 192];
+    const ARGON2I_HASH: [u8; 32] = [
+        137,
+        104,
+        116,
+        234,
+        240,
+        252,
+        23,
+        45,
+        187,
+        193,
+        255,
+        103,
+        166,
+        126,
+        133,
+        93,
+        104,
+        130,
+        95,
+        130,
+        186,
+        165,
+        110,
+        148,
+        123,
+        80,
+        103,
+        207,
+        61,
+        59,
+        103,
+        192,
+    ];
 
-    const ARGON2ID_HASH: [u8; 32] = [168, 185, 165, 229, 198, 234, 20, 3, 186, 99, 21, 71, 134,
-                                     180, 129, 28, 253, 20, 89, 220, 107, 35, 25, 13, 112, 207,
-                                     26, 49, 125, 219, 151, 53];
+    const ARGON2ID_HASH: [u8; 32] = [
+        168,
+        185,
+        165,
+        229,
+        198,
+        234,
+        20,
+        3,
+        186,
+        99,
+        21,
+        71,
+        134,
+        180,
+        129,
+        28,
+        253,
+        20,
+        89,
+        220,
+        107,
+        35,
+        25,
+        13,
+        112,
+        207,
+        26,
+        49,
+        125,
+        219,
+        151,
+        53,
+    ];
 
     const PWD: &'static [u8] = b"password";
 
@@ -857,25 +983,27 @@ mod tests {
 
     #[test]
     fn return_value_from_error_returns_correct_value() {
-        let tuples = vec![(Error::OutputTooShort, ReturnValue::OutputTooShort),
-                          (Error::OutputTooLong, ReturnValue::OutputTooLong),
-                          (Error::PwdTooShort, ReturnValue::PwdTooShort),
-                          (Error::PwdTooLong, ReturnValue::PwdTooLong),
-                          (Error::SaltTooShort, ReturnValue::SaltTooShort),
-                          (Error::SaltTooLong, ReturnValue::SaltTooLong),
-                          (Error::AdTooShort, ReturnValue::AdTooShort),
-                          (Error::AdTooLong, ReturnValue::AdTooLong),
-                          (Error::SecretTooShort, ReturnValue::SecretTooShort),
-                          (Error::SecretTooLong, ReturnValue::SecretTooLong),
-                          (Error::TimeTooSmall, ReturnValue::TimeTooSmall),
-                          (Error::TimeTooLarge, ReturnValue::TimeTooLarge),
-                          (Error::MemoryTooLittle, ReturnValue::MemoryTooLittle),
-                          (Error::MemoryTooMuch, ReturnValue::MemoryTooMuch),
-                          (Error::LanesTooFew, ReturnValue::LanesTooFew),
-                          (Error::LanesTooMany, ReturnValue::LanesTooMany),
-                          (Error::IncorrectType, ReturnValue::IncorrectType),
-                          (Error::IncorrectVersion, ReturnValue::IncorrectType),
-                          (Error::DecodingFail, ReturnValue::DecodingFail)];
+        let tuples = vec![
+            (Error::OutputTooShort, ReturnValue::OutputTooShort),
+            (Error::OutputTooLong, ReturnValue::OutputTooLong),
+            (Error::PwdTooShort, ReturnValue::PwdTooShort),
+            (Error::PwdTooLong, ReturnValue::PwdTooLong),
+            (Error::SaltTooShort, ReturnValue::SaltTooShort),
+            (Error::SaltTooLong, ReturnValue::SaltTooLong),
+            (Error::AdTooShort, ReturnValue::AdTooShort),
+            (Error::AdTooLong, ReturnValue::AdTooLong),
+            (Error::SecretTooShort, ReturnValue::SecretTooShort),
+            (Error::SecretTooLong, ReturnValue::SecretTooLong),
+            (Error::TimeTooSmall, ReturnValue::TimeTooSmall),
+            (Error::TimeTooLarge, ReturnValue::TimeTooLarge),
+            (Error::MemoryTooLittle, ReturnValue::MemoryTooLittle),
+            (Error::MemoryTooMuch, ReturnValue::MemoryTooMuch),
+            (Error::LanesTooFew, ReturnValue::LanesTooFew),
+            (Error::LanesTooMany, ReturnValue::LanesTooMany),
+            (Error::IncorrectType, ReturnValue::IncorrectType),
+            (Error::IncorrectVersion, ReturnValue::IncorrectType),
+            (Error::DecodingFail, ReturnValue::DecodingFail),
+        ];
         for tuple in tuples {
             assert_eq!(ReturnValue::from_error(tuple.0), tuple.1);
         }
@@ -898,23 +1026,25 @@ mod tests {
     #[test]
     fn hash_encoded_with_correct_params_returns_ok() {
         let encoded = CString::new(vec![1u8; 84]).unwrap().into_raw();
-        let result = hash_encoded(1,
-                                  0x13,
-                                  4096,
-                                  3,
-                                  1,
-                                  1,
-                                  PWD.as_ptr(),
-                                  PWD.len(),
-                                  SALT.as_ptr(),
-                                  SALT.len(),
-                                  ptr::null(),
-                                  0,
-                                  ptr::null(),
-                                  0,
-                                  32,
-                                  encoded,
-                                  85);
+        let result = hash_encoded(
+            1,
+            0x13,
+            4096,
+            3,
+            1,
+            1,
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT.as_ptr(),
+            SALT.len(),
+            ptr::null(),
+            0,
+            ptr::null(),
+            0,
+            32,
+            encoded,
+            85,
+        );
         assert_eq!(result, 0);
 
         let expected = CString::new(ARGON2I_ENC).unwrap();
@@ -925,39 +1055,43 @@ mod tests {
     #[test]
     fn hash_encoded_with_too_short_salt_returns_error() {
         let encoded = CString::new(vec![1u8; 84]).unwrap().into_raw();
-        let result = hash_encoded(1,
-                                  0x13,
-                                  4096,
-                                  3,
-                                  1,
-                                  1,
-                                  PWD.as_ptr(),
-                                  PWD.len(),
-                                  SALT_SHORT.as_ptr(),
-                                  SALT_SHORT.len(),
-                                  ptr::null(),
-                                  0,
-                                  ptr::null(),
-                                  0,
-                                  32,
-                                  encoded,
-                                  85);
+        let result = hash_encoded(
+            1,
+            0x13,
+            4096,
+            3,
+            1,
+            1,
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT_SHORT.as_ptr(),
+            SALT_SHORT.len(),
+            ptr::null(),
+            0,
+            ptr::null(),
+            0,
+            32,
+            encoded,
+            85,
+        );
         assert_eq!(result, -6);
     }
 
     #[test]
     fn hash_encoded_argon2d_with_correct_params_returns_ok() {
         let encoded = CString::new(vec![1u8; 84]).unwrap().into_raw();
-        let result = hash_encoded_argon2d(4096,
-                                          3,
-                                          1,
-                                          PWD.as_ptr(),
-                                          PWD.len(),
-                                          SALT.as_ptr(),
-                                          SALT.len(),
-                                          32,
-                                          encoded,
-                                          85);
+        let result = hash_encoded_argon2d(
+            4096,
+            3,
+            1,
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT.as_ptr(),
+            SALT.len(),
+            32,
+            encoded,
+            85,
+        );
         assert_eq!(result, 0);
 
         let expected = CString::new(ARGON2D_ENC).unwrap();
@@ -968,16 +1102,18 @@ mod tests {
     #[test]
     fn hash_encoded_argon2i_with_correct_params_returns_ok() {
         let encoded = CString::new(vec![1u8; 84]).unwrap().into_raw();
-        let result = hash_encoded_argon2i(4096,
-                                          3,
-                                          1,
-                                          PWD.as_ptr(),
-                                          PWD.len(),
-                                          SALT.as_ptr(),
-                                          SALT.len(),
-                                          32,
-                                          encoded,
-                                          85);
+        let result = hash_encoded_argon2i(
+            4096,
+            3,
+            1,
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT.as_ptr(),
+            SALT.len(),
+            32,
+            encoded,
+            85,
+        );
         assert_eq!(result, 0);
 
         let expected = CString::new(ARGON2I_ENC).unwrap();
@@ -988,16 +1124,18 @@ mod tests {
     #[test]
     fn hash_encoded_argon2id_with_correct_params_returns_ok() {
         let encoded = CString::new(vec![1u8; 85]).unwrap().into_raw();
-        let result = hash_encoded_argon2id(4096,
-                                           3,
-                                           1,
-                                           PWD.as_ptr(),
-                                           PWD.len(),
-                                           SALT.as_ptr(),
-                                           SALT.len(),
-                                           32,
-                                           encoded,
-                                           86);
+        let result = hash_encoded_argon2id(
+            4096,
+            3,
+            1,
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT.as_ptr(),
+            SALT.len(),
+            32,
+            encoded,
+            86,
+        );
         assert_eq!(result, 0);
 
         let expected = CString::new(ARGON2ID_ENC).unwrap();
@@ -1020,22 +1158,24 @@ mod tests {
     #[test]
     fn hash_raw_with_correct_params_returns_ok() {
         let mut out = [0u8; 32];
-        let result = hash_raw(1,
-                              0x13,
-                              4096,
-                              3,
-                              1,
-                              1,
-                              PWD.as_ptr(),
-                              PWD.len(),
-                              SALT.as_ptr(),
-                              SALT.len(),
-                              ptr::null(),
-                              0,
-                              ptr::null(),
-                              0,
-                              out.as_mut_ptr(),
-                              out.len());
+        let result = hash_raw(
+            1,
+            0x13,
+            4096,
+            3,
+            1,
+            1,
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT.as_ptr(),
+            SALT.len(),
+            ptr::null(),
+            0,
+            ptr::null(),
+            0,
+            out.as_mut_ptr(),
+            out.len(),
+        );
         assert_eq!(result, 0);
         assert_eq!(out, ARGON2I_HASH);
     }
@@ -1043,37 +1183,41 @@ mod tests {
     #[test]
     fn hash_raw_with_too_short_salt_returns_error() {
         let mut out = [0u8; 32];
-        let result = hash_raw(1,
-                              0x13,
-                              4096,
-                              3,
-                              1,
-                              1,
-                              PWD.as_ptr(),
-                              PWD.len(),
-                              SALT_SHORT.as_ptr(),
-                              SALT_SHORT.len(),
-                              ptr::null(),
-                              0,
-                              ptr::null(),
-                              0,
-                              out.as_mut_ptr(),
-                              out.len());
+        let result = hash_raw(
+            1,
+            0x13,
+            4096,
+            3,
+            1,
+            1,
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT_SHORT.as_ptr(),
+            SALT_SHORT.len(),
+            ptr::null(),
+            0,
+            ptr::null(),
+            0,
+            out.as_mut_ptr(),
+            out.len(),
+        );
         assert_eq!(result, -6);
     }
 
     #[test]
     fn hash_raw_argon2d_with_correct_params_returns_ok() {
         let mut out = [0u8; 32];
-        let result = hash_raw_argon2d(4096,
-                                      3,
-                                      1,
-                                      PWD.as_ptr(),
-                                      PWD.len(),
-                                      SALT.as_ptr(),
-                                      SALT.len(),
-                                      out.as_mut_ptr(),
-                                      out.len());
+        let result = hash_raw_argon2d(
+            4096,
+            3,
+            1,
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT.as_ptr(),
+            SALT.len(),
+            out.as_mut_ptr(),
+            out.len(),
+        );
         assert_eq!(result, 0);
         assert_eq!(out, ARGON2D_HASH);
     }
@@ -1081,15 +1225,17 @@ mod tests {
     #[test]
     fn hash_raw_argon2i_with_correct_params_returns_ok() {
         let mut out = [0u8; 32];
-        let result = hash_raw_argon2i(4096,
-                                      3,
-                                      1,
-                                      PWD.as_ptr(),
-                                      PWD.len(),
-                                      SALT.as_ptr(),
-                                      SALT.len(),
-                                      out.as_mut_ptr(),
-                                      out.len());
+        let result = hash_raw_argon2i(
+            4096,
+            3,
+            1,
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT.as_ptr(),
+            SALT.len(),
+            out.as_mut_ptr(),
+            out.len(),
+        );
         assert_eq!(result, 0);
         assert_eq!(out, ARGON2I_HASH);
     }
@@ -1097,15 +1243,17 @@ mod tests {
     #[test]
     fn hash_raw_argon2id_with_correct_params_returns_ok() {
         let mut out = [0u8; 32];
-        let result = hash_raw_argon2id(4096,
-                                       3,
-                                       1,
-                                       PWD.as_ptr(),
-                                       PWD.len(),
-                                       SALT.as_ptr(),
-                                       SALT.len(),
-                                       out.as_mut_ptr(),
-                                       out.len());
+        let result = hash_raw_argon2id(
+            4096,
+            3,
+            1,
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT.as_ptr(),
+            SALT.len(),
+            out.as_mut_ptr(),
+            out.len(),
+        );
         assert_eq!(result, 0);
         assert_eq!(out, ARGON2ID_HASH);
     }
@@ -1113,12 +1261,14 @@ mod tests {
     #[test]
     fn hash_raw_simple_with_correct_params_returns_ok() {
         let mut out = [0u8; 32];
-        let result = hash_raw_simple(PWD.as_ptr(),
-                                     PWD.len(),
-                                     SALT.as_ptr(),
-                                     SALT.len(),
-                                     out.as_mut_ptr(),
-                                     out.len());
+        let result = hash_raw_simple(
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT.as_ptr(),
+            SALT.len(),
+            out.as_mut_ptr(),
+            out.len(),
+        );
         assert_eq!(result, 0);
         assert_eq!(out, ARGON2I_HASH);
     }
@@ -1139,117 +1289,131 @@ mod tests {
 
     #[test]
     fn verify_raw_with_correct_password_returns_ok() {
-        let result = verify_raw(1,
-                                0x13,
-                                4096,
-                                3,
-                                1,
-                                1,
-                                PWD.as_ptr(),
-                                PWD.len(),
-                                SALT.as_ptr(),
-                                SALT.len(),
-                                ptr::null(),
-                                0,
-                                ptr::null(),
-                                0,
-                                ARGON2I_HASH.as_ptr(),
-                                ARGON2I_HASH.len());
+        let result = verify_raw(
+            1,
+            0x13,
+            4096,
+            3,
+            1,
+            1,
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT.as_ptr(),
+            SALT.len(),
+            ptr::null(),
+            0,
+            ptr::null(),
+            0,
+            ARGON2I_HASH.as_ptr(),
+            ARGON2I_HASH.len(),
+        );
         assert_eq!(result, 0);
     }
 
     #[test]
     fn verify_raw_with_incorrect_password_returns_error() {
-        let result = verify_raw(1,
-                                0x13,
-                                4096,
-                                3,
-                                1,
-                                1,
-                                PWD_INCORRECT.as_ptr(),
-                                PWD_INCORRECT.len(),
-                                SALT.as_ptr(),
-                                SALT.len(),
-                                ptr::null(),
-                                0,
-                                ptr::null(),
-                                0,
-                                ARGON2I_HASH.as_ptr(),
-                                ARGON2I_HASH.len());
+        let result = verify_raw(
+            1,
+            0x13,
+            4096,
+            3,
+            1,
+            1,
+            PWD_INCORRECT.as_ptr(),
+            PWD_INCORRECT.len(),
+            SALT.as_ptr(),
+            SALT.len(),
+            ptr::null(),
+            0,
+            ptr::null(),
+            0,
+            ARGON2I_HASH.as_ptr(),
+            ARGON2I_HASH.len(),
+        );
         assert_eq!(result, -35);
     }
 
     #[test]
     fn verify_raw_with_too_sort_salt_returns_error() {
-        let result = verify_raw(1,
-                                0x13,
-                                4096,
-                                3,
-                                1,
-                                1,
-                                PWD.as_ptr(),
-                                PWD.len(),
-                                SALT_SHORT.as_ptr(),
-                                SALT_SHORT.len(),
-                                ptr::null(),
-                                0,
-                                ptr::null(),
-                                0,
-                                ARGON2I_HASH.as_ptr(),
-                                ARGON2I_HASH.len());
+        let result = verify_raw(
+            1,
+            0x13,
+            4096,
+            3,
+            1,
+            1,
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT_SHORT.as_ptr(),
+            SALT_SHORT.len(),
+            ptr::null(),
+            0,
+            ptr::null(),
+            0,
+            ARGON2I_HASH.as_ptr(),
+            ARGON2I_HASH.len(),
+        );
         assert_eq!(result, -6);
     }
 
     #[test]
     fn verify_raw_argon2d_with_correct_password_returns_ok() {
-        let result = verify_raw_argon2d(4096,
-                                        3,
-                                        1,
-                                        PWD.as_ptr(),
-                                        PWD.len(),
-                                        SALT.as_ptr(),
-                                        SALT.len(),
-                                        ARGON2D_HASH.as_ptr(),
-                                        ARGON2D_HASH.len());
+        let result = verify_raw_argon2d(
+            4096,
+            3,
+            1,
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT.as_ptr(),
+            SALT.len(),
+            ARGON2D_HASH.as_ptr(),
+            ARGON2D_HASH.len(),
+        );
         assert_eq!(result, 0);
     }
 
     #[test]
     fn verify_raw_argon2i_with_correct_password_returns_ok() {
-        let result = verify_raw_argon2i(4096,
-                                        3,
-                                        1,
-                                        PWD.as_ptr(),
-                                        PWD.len(),
-                                        SALT.as_ptr(),
-                                        SALT.len(),
-                                        ARGON2I_HASH.as_ptr(),
-                                        ARGON2I_HASH.len());
+        let result = verify_raw_argon2i(
+            4096,
+            3,
+            1,
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT.as_ptr(),
+            SALT.len(),
+            ARGON2I_HASH.as_ptr(),
+            ARGON2I_HASH.len(),
+        );
         assert_eq!(result, 0);
     }
 
     #[test]
     fn verify_raw_argon2id_with_correct_password_returns_ok() {
-        let result = verify_raw_argon2id(4096,
-                                         3,
-                                         1,
-                                         PWD.as_ptr(),
-                                         PWD.len(),
-                                         SALT.as_ptr(),
-                                         SALT.len(),
-                                         ARGON2ID_HASH.as_ptr(),
-                                         ARGON2ID_HASH.len());
+        let result = verify_raw_argon2id(
+            4096,
+            3,
+            1,
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT.as_ptr(),
+            SALT.len(),
+            ARGON2ID_HASH.as_ptr(),
+            ARGON2ID_HASH.len(),
+        );
         assert_eq!(result, 0);
     }
 
     #[test]
     fn verify_raw_simple_with_correct_password_returns_ok() {
-        let result = verify_raw_simple(PWD.as_ptr(),
-                                       PWD.len(),
-                                       SALT.as_ptr(),
-                                       SALT.len(),
-                                       ARGON2I_HASH.as_ptr(),
-                                       ARGON2I_HASH.len());
+        let result = verify_raw_simple(
+            PWD.as_ptr(),
+            PWD.len(),
+            SALT.as_ptr(),
+            SALT.len(),
+            ARGON2I_HASH.as_ptr(),
+            ARGON2I_HASH.len(),
+        );
         assert_eq!(result, 0);
     }
 
@@ -1264,17 +1428,19 @@ mod tests {
         let secret = b"secret";
         let ad = b"ad";
         let hash_len = 32;
-        let result = mk_config(variant,
-                               version,
-                               mem_cost,
-                               time_cost,
-                               lanes,
-                               threads,
-                               secret.as_ptr(),
-                               secret.len(),
-                               ad.as_ptr(),
-                               ad.len(),
-                               hash_len);
+        let result = mk_config(
+            variant,
+            version,
+            mem_cost,
+            time_cost,
+            lanes,
+            threads,
+            secret.as_ptr(),
+            secret.len(),
+            ad.as_ptr(),
+            ad.len(),
+            hash_len,
+        );
         assert!(result.is_ok());
 
         let config = result.unwrap();
@@ -1294,17 +1460,19 @@ mod tests {
         let variant = 3;
         let secret = b"secret";
         let ad = b"ad";
-        let result = mk_config(variant,
-                               0x13,
-                               1024,
-                               2,
-                               4,
-                               4,
-                               secret.as_ptr(),
-                               secret.len(),
-                               ad.as_ptr(),
-                               ad.len(),
-                               32);
+        let result = mk_config(
+            variant,
+            0x13,
+            1024,
+            2,
+            4,
+            4,
+            secret.as_ptr(),
+            secret.len(),
+            ad.as_ptr(),
+            ad.len(),
+            32,
+        );
         assert_eq!(result, Err(ReturnValue::IncorrectType));
     }
 
@@ -1313,17 +1481,19 @@ mod tests {
         let version = 0;
         let secret = b"secret";
         let ad = b"ad";
-        let result = mk_config(1,
-                               version,
-                               1024,
-                               2,
-                               4,
-                               4,
-                               secret.as_ptr(),
-                               secret.len(),
-                               ad.as_ptr(),
-                               ad.len(),
-                               32);
+        let result = mk_config(
+            1,
+            version,
+            1024,
+            2,
+            4,
+            4,
+            secret.as_ptr(),
+            secret.len(),
+            ad.as_ptr(),
+            ad.len(),
+            32,
+        );
         assert_eq!(result, Err(ReturnValue::IncorrectType));
     }
 
